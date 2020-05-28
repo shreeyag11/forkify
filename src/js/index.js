@@ -1,13 +1,33 @@
 // Global app controller
-import axios from 'axios';
+import Search from './models/Search';
+import { elements } from './views/base';
+import * as searchView from './views/searchView';
 
-async function getResult(query) {
-    const proxy = 'https://cors-anywhere.herokuapp.com/';
-    try {
-        const res = await axios(`${proxy}https://forkify-api.herokuapp.com/api/search?&q=${query}`);
-        console.log(res.data.recipes);
-    } catch (error) {
-        alert(error);
+/**-Global state of the app
+ * - Search object
+ * - Current recipe object
+ * - Shopping list object
+ * - Liked recipe
+ */
+const state = {};
+
+const controlSearch = async () => {
+    // Get query from view
+    const query = searchView.getInput();
+    //New search object and add to state
+    if(query) {
+        state.search = new Search(query);
+        //Prepare UI for results
+        searchView.clearInput();
+        searchView.clearResults();
+        //Search for recipe
+        await state.search.getResult();
+        //Render results on UI
+        searchView.renderResults(state.search.result);
     }
 }
-getResult('pizza');
+
+elements.searchForm.addEventListener('click', e => {
+    e.preventDefault();
+    controlSearch();
+});
