@@ -72,7 +72,6 @@ const renderButtons = (page, numResults, resPerPage) => {
 }
 
 export const renderResults = (recipes, page = 1, resPerPage = 10) => {
-    console.log(recipes);
     const start = (page - 1) * resPerPage;
     const end = page * resPerPage;
     recipes.slice(start, end).forEach(renderRecipe);
