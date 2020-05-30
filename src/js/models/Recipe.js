@@ -32,7 +32,7 @@ export default class Recipe {
     parseIngredients() {
         const unitsLong = ['tablespoons', 'tablespoon', 'ounces', 'ounce', 'teaspoons', 'teaspoon', 'cups', 'pounds'];
         const unitsShort = ['tbsp', 'tbsp', 'oz', 'oz', 'tsp', 'tsp', 'cup', 'pound'];
-
+        const units = [...unitsShort, 'kg', 'g'];
         const newIngredients = this.ingredients.map(el => {
             // Uniform ingredients
             let ingredient = el.toLowerCase();
@@ -45,25 +45,25 @@ export default class Recipe {
 
             // Parse ingredients into count, units and ingredient
             const arrIng = ingredient.split(' ');
-            const unitIndex = arrIng.findIndex(el2 => unitsShort.includes(el2));
+            const unitIndex = arrIng.findIndex(el2 => units.includes(el2));
 
             let objIng;
             if (unitIndex > -1) {
                 //There is a unit
-                const arrCount= arrIng.slice(0,unitIndex);
+                const arrCount = arrIng.slice(0, unitIndex);
 
                 let count;
-                if(arrCount.length === 1){
+                if (arrCount.length === 1) {
                     //Just one digit
-                    count = arrCount[0].replace('-','+');
+                    count = eval(arrIng[0].replace('-', '+'));
                 } else {
-                    count = eval(arrIng.slice(0,unitIndex).join('+'));
+                    count = eval(arrIng.slice(0, unitIndex).join('+'));
                 }
 
                 objIng = {
                     count,
                     unit: arrIng[unitIndex],
-                    ingredient: arrIng.slice(unitIndex+1).join(' ')
+                    ingredient: arrIng.slice(unitIndex + 1).join(' ')
                 }
             } else if (parseInt(arrIng[0], 10)) {
                 //There is NO unit, but 1st element is a number
@@ -80,7 +80,7 @@ export default class Recipe {
                     ingredient
                 }
             }
-            return ingredient;
+            return objIng;
         })
         this.ingredients = newIngredients;
     }
