@@ -14,7 +14,7 @@ export default class Recipe {
             this.title = res.data.recipe.title;
             this.url = res.data.recipe.source_url;
         } catch (error) {
-            alert(`error ${error}`);
+            alert(`Something went wrong with fetching the recipe`);
         }
     }
 
